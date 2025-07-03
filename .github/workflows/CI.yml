@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET9
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+        
+    - name: Restore dependencies
+      run: dotnet restore spacebattle
+      
+    - name: Build
+      run: dotnet build spacebattle --no-restore /p:ContinuousIntegrationBuild=true
+      
+    - name: Test & Coverage
+      run:  dotnet test spacebattle\SpaceBattle.Lib.Tests --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+
+    - name: Format
+      run: dotnet format spacebattle --verify-no-changes
