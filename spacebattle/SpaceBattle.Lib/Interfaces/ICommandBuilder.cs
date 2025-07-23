@@ -1,6 +1,6 @@
 namespace SpaceBattle.Lib;
 
-public interface ICommandStartableBuilder
+public interface ICommandBuilder
 {
     ICommand Build(ICommandStartable commandStartable);
 }
