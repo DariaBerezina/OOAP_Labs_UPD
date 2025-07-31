@@ -1,6 +1,6 @@
 namespace SpaceBattle.Lib;
 
-public interface ICommandBuilder<in T>
+public interface ICommandBuilder
 {
-    ICommand Build(T commandData);
+    ICommand Build(IUObject order, Dictionary<string, object> properties);
 }
