@@ -2,10 +2,10 @@ using Hwdtech;
 
 namespace SpaceBattle.Lib;
 
-public class VelocityChangableAdpater : IVelocityChangable
+public class VelocityChangableAdapter : IVelocityChangable
 {
     private readonly IUObject _uObject;
-    public VelocityChangableAdpater(IUObject uObject)
+    public VelocityChangableAdapter(IUObject uObject)
     {
         _uObject = uObject;
     }
