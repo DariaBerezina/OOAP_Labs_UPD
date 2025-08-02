@@ -8,7 +8,7 @@ public class MoveCommandBuilder : ICommandBuilder
     {
         var velocityAdapter = IoC.Resolve<IVelocityChangable>("Adapter.VelocityChangable", order);
         var newVelocity = (Vector)properties["velocity"];
-        IoC.Resolve<ICommand>("SetVelocityCommnad", velocityAdapter, newVelocity).Execute();
+        IoC.Resolve<ICommand>("SetVelocityCommand", velocityAdapter, newVelocity).Execute();
         var movableAdapter = IoC.Resolve<IMovable>("Adapter.Movable", order);
         var moveCommand = IoC.Resolve<ICommand>("MoveCommand", movableAdapter);
         return moveCommand;
