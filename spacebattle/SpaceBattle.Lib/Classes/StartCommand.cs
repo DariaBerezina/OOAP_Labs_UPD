@@ -14,7 +14,7 @@ public class StartCommand : ICommand
         var order = _commandStartable.Order;
         var properties = _commandStartable.Properties;
         var actionType = (string)properties["action"];
-        var builder = IoC.Resolve<ICommandBuilder>($"Commnad.Build.{actionType}");
+        var builder = IoC.Resolve<ICommandBuilder>($"Command.Build.{actionType}");
         var cmd = builder.Build(order, properties);
         _commandStartable.Queue.Add(cmd);
     }
