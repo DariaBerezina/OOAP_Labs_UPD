@@ -25,7 +25,7 @@ jobs:
       run: dotnet build spacebattle --no-restore /p:ContinuousIntegrationBuild=true
       
     - name: Test & Coverage
-      run:  dotnet test spacebattle\SpaceBattle.Lib.Tests --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+      run: cd spacebattle && dotnet test SpaceBattle.Lib.Tests /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
 
     - name: Format
       run: dotnet format spacebattle --verify-no-changes
