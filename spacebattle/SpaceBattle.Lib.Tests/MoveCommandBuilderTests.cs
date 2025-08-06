@@ -16,7 +16,6 @@ namespace SpaceBattle.Lib.Tests
 
         public MoveCommandBuilderTests()
         {
-            // Инициализация IoC контейнера
             new InitScopeBasedIoCImplementationCommand().Execute();
             IoC.Resolve<Hwdtech.ICommand>(
                 "Scopes.Current.Set",
@@ -33,7 +32,6 @@ namespace SpaceBattle.Lib.Tests
             _setVelocityCommandMock = new Mock<ICommand>();
             _moveCommandMock = new Mock<ICommand>();
 
-            // Регистрация зависимостей
             IoC.Resolve<Hwdtech.ICommand>(
                 "IoC.Register",
                 "Adapter.VelocityChangable",
