@@ -15,6 +15,7 @@ public static class AdapterCodeGenerator
 
         sb.AppendLine("using System;");
         sb.AppendLine("using SpaceBattle.Lib;");
+        sb.AppendLine("using Hwdtech;");
         sb.AppendLine("");
         sb.AppendLine("namespace SpaceBattle.Lib.Generated");
         sb.AppendLine("{");
