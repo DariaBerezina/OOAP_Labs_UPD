@@ -13,7 +13,7 @@ public class InitUniversalDiStrategyCommand : ICommand
             {false, (type, uObj) => IoC.Resolve<object>(type.Name, uObj)}
         };
 
-        IoC.Resolve<ICommand>("IoC.Register", "IoC.CreateInstance", (object[] args) =>
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "IoC.CreateInstance", (object[] args) =>
         {
             var targetType = (Type)args[0];
             var uObject = (IUObject)args[1];
