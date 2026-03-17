@@ -9,7 +9,7 @@ public class InitAdapterGenerationCommand : ICommand
     {
         var generatedTypeCache = new ConcurrentDictionary<Type, Type>();
 
-        IoC.Resolve<ICommand>("IoC.Register", "Adapter", (object[] args) =>
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Adapter", (object[] args) =>
         {
             var targetInterface = (Type)args[0];
             var targetObj = (IUObject)args[1];
