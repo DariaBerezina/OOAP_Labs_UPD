@@ -119,4 +119,49 @@ public class GameCommandTests
         var thrownException = Assert.Throws<InvalidOperationException>(() => defaultHandler.Execute());
         Assert.Equal("Fatal Error", thrownException.Message);
     }
+
+
+    [Fact]
+    public void Execute_ShouldCatchException_AndPassToSpecificHandler_OrThrowDefault()
+    {
+        var currentTestScope = IoC.Resolve<object>("Scopes.Current");
+        var gameScope = IoC.Resolve<object>("Scopes.New", currentTestScope);
+
+        IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", gameScope).Execute();
+
+        new InitExceptionHandlerStrategyCommand().Execute();
+
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.TimeQuantum", (object[] args) => (object)TimeSpan.FromMilliseconds(50)).Execute();
+
+#pragma warning disable S3928
+        var testException = new ArgumentOutOfRangeException("Test Exception");
+#pragma warning disable S3928
+
+
+        var faultCommandMock = new Mock<ICommand>();
+        faultCommandMock.Setup(c => c.Execute()).Throws(testException);
+
+        var queueMock = new Mock<IQueue>();
+        queueMock.Setup(q => q.Take()).Returns(faultCommandMock.Object);
+
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Queue", (object[] args) => (object)queueMock.Object).Execute();
+
+        var cmdTypeName = faultCommandMock.Object.GetType().Name;
+        var exTypeName = testException.GetType().Name;
+
+        var isSpecificHandlerCalled = false;
+        var specificHandlerMock = new Mock<ICommand>();
+        specificHandlerMock.Setup(h => h.Execute()).Callback(() => isSpecificHandlerCalled = true);
+
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", $"Exception.Handler.{cmdTypeName}.{exTypeName}",
+            (object[] args) => (object)specificHandlerMock.Object).Execute();
+
+        IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", currentTestScope).Execute();
+
+        var gameCommand = new GameCommand(gameScope);
+
+        gameCommand.Execute();
+
+        Assert.True(isSpecificHandlerCalled, "Специфичный обработчик не был вызван!");
+    }
 }
