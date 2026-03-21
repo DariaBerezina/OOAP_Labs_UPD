@@ -21,7 +21,8 @@ public class GameCommand : ICommand
 
         var stopwatch = Stopwatch.StartNew();
 
-        while (stopwatch.Elapsed < quantum)
+        bool canContinue;
+        do
         {
             var command = queue.Take();
 
@@ -34,7 +35,9 @@ public class GameCommand : ICommand
                 var handler = IoC.Resolve<ICommand>("Exception.Handler", command, ex);
                 handler.Execute();
             }
-        }
+            canContinue = stopwatch.Elapsed < quantum;
+
+        } while (canContinue);
 
         stopwatch.Stop();
     }
