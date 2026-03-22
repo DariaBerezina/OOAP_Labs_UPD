@@ -9,13 +9,13 @@ public class InitGameStrategiesCommand : ICommand
         IoC.Resolve<Hwdtech.ICommand>(
             IocRegister,
             "Game.CreateNew",
-            (Func<object[], object>)CreateGameStrategy.Resolve
+            new Func<object[], object>(CreateGameStrategy.Resolve)
         ).Execute();
 
         IoC.Resolve<Hwdtech.ICommand>(
             IocRegister,
             "Game.Delete",
-            (Func<object[], object>)DeleteGameStrategy.Resolve
+            new Func<object[], object>(DeleteGameStrategy.Resolve)
         ).Execute();
     }
 }
