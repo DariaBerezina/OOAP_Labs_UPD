@@ -45,6 +45,7 @@ public class GameStrategiesTests
         Assert.NotNull(repository);
     }
 
+
     [Fact]
     public void DeleteGameStrategy_ReturnsCommand_That_ClearsRepository_And_RestoresScope()
     {
@@ -69,9 +70,9 @@ public class GameStrategiesTests
 
         var args = new object[] { gameScope };
 
-        var deleteCommand = (Hwdtech.ICommand)DeleteGameStrategy.Resolve(args);
+        var deleteCommand = (ICommand)DeleteGameStrategy.Resolve(args);
 
-        Assert.IsType<ActionCommand>(deleteCommand);
+        Assert.IsType<Lib.ActionCommand>(deleteCommand);
 
         deleteCommand.Execute();
 
@@ -86,20 +87,14 @@ public class GameStrategiesTests
     public void InitGameStrategiesCommand_Registers_Strategies_In_IoC()
     {
         var initCommand = new InitGameStrategiesCommand();
+
         initCommand.Execute();
 
-        var createStrategy = IoC.Resolve<Func<object[], object>>("Game.CreateNew");
-        var deleteStrategy = IoC.Resolve<Func<object[], object>>("Game.Delete");
-
-        Assert.NotNull(createStrategy);
-        Assert.NotNull(deleteStrategy);
-
-        var dummyScope = IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Current"));
-        var createdGameCmd = createStrategy([TimeSpan.FromSeconds(1)]);
-
+        var createdGameCmd = IoC.Resolve<object>("Game.CreateNew", TimeSpan.FromSeconds(1));
         Assert.IsType<GameCommand>(createdGameCmd);
 
-        var deletedGameCmd = deleteStrategy([dummyScope]);
-        Assert.IsType<ActionCommand>(deletedGameCmd);
+        var dummyScope = IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Current"));
+        var deletedGameCmd = IoC.Resolve<object>("Game.Delete", dummyScope);
+        Assert.IsType<Lib.ActionCommand>(deletedGameCmd);
     }
 }
