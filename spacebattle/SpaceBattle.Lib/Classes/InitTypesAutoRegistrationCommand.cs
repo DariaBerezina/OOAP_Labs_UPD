@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Hwdtech;
+﻿using Hwdtech;
 
 namespace SpaceBattle.Lib;
 
@@ -15,10 +14,10 @@ public class InitTypesAutoRegistrationCommand : ICommand
         _prefix = prefix;
         _suffixToRemove = suffixToRemove;
     }
-#pragma warning disable S2325
+
     public void Execute()
     {
-        Assembly.GetExecutingAssembly().GetTypes()
+        _targetInterface.Assembly.GetTypes()
             .Where(t => _targetInterface.IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
             .ToList()
             .ForEach(type =>
@@ -31,5 +30,4 @@ public class InitTypesAutoRegistrationCommand : ICommand
                 }).Execute();
             });
     }
-#pragma warning disable S2325
 }
